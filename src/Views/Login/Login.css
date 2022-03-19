@@ -1,0 +1,40 @@
+.LoginWrapper{
+    display: flex;
+    border: 1px solid black;
+    flex-direction: column;
+    gap: var(--gap-s);
+    padding: var(--gap-s);
+    background-color: var(--background-purple);
+    height: 50%;
+    width: 100%;
+    align-items: center;
+}
+.InputWrapper{
+    display: flex;
+    flex-direction: column;
+    padding: var(--gap-s);
+    width: 100%;
+}
+
+.inputWithValidator{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.loginHeading{
+    align-items: center;
+    background: var(--light-blue);
+    width: 100%;
+}
+
+.Login{
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.loginButtons{
+    display: flex;
+    gap: var(--gap-s);
+}

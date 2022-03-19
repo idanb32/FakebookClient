@@ -1,0 +1,51 @@
+.registerWrapper{
+    display: flex;
+    border: 1px solid black;
+    flex-direction: column;
+    gap: var(--gap-s);
+    padding: var(--gap-s);
+    background-color: var(--background-purple);
+    height: 50%;
+    width: 100%;
+    align-items: center;
+}
+.inputWrapper{
+    display: flex;
+    flex-direction: column;
+    padding: var(--gap-s);
+    width: 100%;
+}
+
+.inputWithValidator{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.registerHeading{
+    align-items: center;
+    background: var(--light-blue);
+    width: 100%;
+}
+
+.register{
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.registerButtons{
+    display: flex;
+    gap: var(--gap-s);
+}
+.img{ 
+    width: 150px;
+    height: 150px;
+    border: 1px solid black;
+}
+.imgInput{
+    color: var(--background-white);
+}
+.imgDiv{
+    padding: var(--gap-s);
+}
