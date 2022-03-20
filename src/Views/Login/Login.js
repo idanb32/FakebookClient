@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import FacebookBtn from "../../GlobalComponents/FacebookBtn/FacebookBtn";
+import GoogleBtn from "../../GlobalComponents/GoogleBtn/GoogleBtn";
 import Input from "../../GlobalComponents/Input/Input";
 import './Login.css'
 
@@ -22,6 +24,16 @@ const Login = () => {
         console.log('got into submit')
         if (validate()) return
         console.log('passed validate')
+    }
+
+
+    // need to make work
+    const handleSignUpWithGoogle= (googleObj) =>{
+        console.log(googleObj);
+    }
+
+    const handleSignUpWithFacebook= (facebookObj) =>{
+        console.log(facebookObj);
     }
 
     const validate = () => {
@@ -52,6 +64,12 @@ const Login = () => {
                 <div className="inputWithValidator password">
                     <Input onChange={handlePassword} placeholder="Password" type="Password" />
                     <div className="ErrorMsg"> {passwordValidator}</div>
+                </div>
+                <div>
+                    <GoogleBtn SignUpWithGoogle={handleSignUpWithGoogle} text="Sign in with google"/>
+                </div>
+                <div>
+                    <FacebookBtn SignUpWithFacebook={handleSignUpWithFacebook}/>
                 </div>
             </div>
             <div className="loginButtons">

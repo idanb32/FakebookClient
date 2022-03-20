@@ -4,6 +4,8 @@ import Input from "../../GlobalComponents/Input/Input";
 import './Register.css'
 import 'axios';
 import axios from "axios";
+import GoogleBtn from "../../GlobalComponents/GoogleBtn/GoogleBtn";
+import FacebookBtn from "../../GlobalComponents/FacebookBtn/FacebookBtn";
 
 const Register = () => {
     const [userName, setUserName] = useState("");
@@ -45,7 +47,14 @@ const Register = () => {
         setFile(e.target.files[0]);
     };
 
-
+    // need to make work
+    const handleSignUpWithGoogle= (googleObj) =>{
+        console.log(googleObj);
+    }
+    
+    const handleSignUpWithFacebook= (facebookObj) =>{
+        console.log(facebookObj);
+    }
 
     const submit = () => {
         if (validate()) return
@@ -112,7 +121,12 @@ const Register = () => {
                     <img src={profileImg} alt="" className="img" />
                     <Input type="file" onChange={imageHandler} placeholder="Profie picture" accept="image/*" className="imgInput" />
                 </div>
-             
+                <div>
+                    <GoogleBtn SignUpWithGoogle={handleSignUpWithGoogle} text="Sign up with google"/>
+                </div>
+                <div>
+                    <FacebookBtn SignUpWithFacebook={handleSignUpWithFacebook} />
+                </div>
             </div>
             <div className="registerButtons">
                 <button onClick={submit} className="btn"> Register </button>

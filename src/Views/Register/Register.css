@@ -5,7 +5,7 @@
     gap: var(--gap-s);
     padding: var(--gap-s);
     background-color: var(--background-purple);
-    height: 50%;
+    height: 80%;
     width: 100%;
     align-items: center;
 }
