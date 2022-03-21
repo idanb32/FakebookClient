@@ -3,13 +3,18 @@ import { Link } from "react-router-dom";
 import FacebookBtn from "../../GlobalComponents/FacebookBtn/FacebookBtn";
 import GoogleBtn from "../../GlobalComponents/GoogleBtn/GoogleBtn";
 import Input from "../../GlobalComponents/Input/Input";
+import axios from "axios";
 import './Login.css'
 
-const Login = () => {
+
+const port = "http://localhost:3000/"
+
+const Login = (props) => {
     const [userName, setUserName] = useState("");
     const [userNameValidator, setUserNameValidator] = useState("");
     const [password, setPassword] = useState("");
     const [passwordValidator, setPasswordValidator] = useState("");
+    const [serverError, setServerError] = useState('');
 
     const handleUserName = (value) => {
         setUserName(value.target.value);
@@ -21,19 +26,52 @@ const Login = () => {
 
 
     const submit = () => {
-        console.log('got into submit')
         if (validate()) return
         console.log('passed validate')
+        let loginObj = {
+            username: userName,
+            password: password
+        }
+        axios.post(port + "authentication/login", loginObj).
+            then((resault) => {
+                let data = resault.data;
+                console.log(data);
+                if (typeof data == "string")
+                    setServerError(data);
+                else props.logIn(data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
 
-    // need to make work
-    const handleSignUpWithGoogle= (googleObj) =>{
-        console.log(googleObj);
+    const handleSignUpWithGoogle = (googleObj) => {
+        axios.post(port + "authentication/loginWithGoogle", googleObj).
+            then((resault) => {
+                let data = resault.data;
+                console.log(typeof data);
+                if (typeof data == "string")
+                    setServerError(data);
+                else props.logIn(data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
-    const handleSignUpWithFacebook= (facebookObj) =>{
-        console.log(facebookObj);
+    const handleSignUpWithFacebook = (facebookObj) => {
+        axios.post(port + "authentication/loginWithFacebook", facebookObj).
+            then((resault) => {
+                let data = resault.data;
+                console.log(data);
+                if (typeof data == "string")
+                    setServerError(data);
+                else props.logIn(data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     const validate = () => {
@@ -66,11 +104,14 @@ const Login = () => {
                     <div className="ErrorMsg"> {passwordValidator}</div>
                 </div>
                 <div>
-                    <GoogleBtn SignUpWithGoogle={handleSignUpWithGoogle} text="Sign in with google"/>
+                    <GoogleBtn SignUpWithGoogle={handleSignUpWithGoogle} text="Sign in with google" />
                 </div>
                 <div>
-                    <FacebookBtn SignUpWithFacebook={handleSignUpWithFacebook}/>
+                    <FacebookBtn SignUpWithFacebook={handleSignUpWithFacebook} />
                 </div>
+            </div>
+            <div className="ErrorMsg">
+                {serverError}
             </div>
             <div className="loginButtons">
                 <button onClick={submit} className="btn"> Login </button>

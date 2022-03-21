@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../GlobalComponents/Input/Input";
 import './Register.css'
-import 'axios';
 import axios from "axios";
-import GoogleBtn from "../../GlobalComponents/GoogleBtn/GoogleBtn";
-import FacebookBtn from "../../GlobalComponents/FacebookBtn/FacebookBtn";
+
+const port = "http://localhost:3000/"
 
 const Register = () => {
     const [userName, setUserName] = useState("");
@@ -18,6 +17,8 @@ const Register = () => {
     const [userDisplayValidator, setUserDisplayValidator] = useState("");
     const [profileImg, setProfileImg] = useState('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png');
     const [file, setFile] = useState();
+    const [serverError, setServerError] = useState('');
+    const nav = useNavigate();
 
 
     const handleUserName = (value) => {
@@ -47,27 +48,44 @@ const Register = () => {
         setFile(e.target.files[0]);
     };
 
-    // need to make work
-    const handleSignUpWithGoogle= (googleObj) =>{
-        console.log(googleObj);
-    }
-    
-    const handleSignUpWithFacebook= (facebookObj) =>{
-        console.log(facebookObj);
-    }
 
     const submit = () => {
         if (validate()) return
         console.log('passed validate')
-        if (profileImg != "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png") {
-            let data = new FormData();
-            data.append("file", file);
-            axios.post('http://localhost:3000/file/upload', data)
-                .then((res) => {
-                    console.log(res.data)
-                })
-                .catch((err) => { console.log(err) })
+        let registerObj = {
+            username: userName,
+            password: password,
+            userDisplay: userDisplay,
+            imgurl: "",
+            email: email,
         }
+        if (profileImg == "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
+            registerObj.imgurl = profileImg;
+        axios.post(port + "authentication/register", registerObj)
+            .then((resault) => {
+                let data = resault.data;
+                if (typeof data == "string") {
+                    setServerError(data);
+                    return;
+                }
+                if (registerObj.imgurl == "") {
+                    let data = new FormData();
+                    data.append("file", file);
+                    data.append("username", userName);
+                    axios.post('http://localhost:3000/file/uploadForSignUp', data)
+                        .then((res) => {
+                            console.log('got into new user!@!@')
+                            console.log(res.data);
+                            nav('/', {state:{ token: data }});
+                        })
+                        .catch((err) => { console.log(err) })
+                }
+                else
+                    nav('/', {state:{token: data}});
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     const validate = () => {
@@ -121,12 +139,9 @@ const Register = () => {
                     <img src={profileImg} alt="" className="img" />
                     <Input type="file" onChange={imageHandler} placeholder="Profie picture" accept="image/*" className="imgInput" />
                 </div>
-                <div>
-                    <GoogleBtn SignUpWithGoogle={handleSignUpWithGoogle} text="Sign up with google"/>
-                </div>
-                <div>
-                    <FacebookBtn SignUpWithFacebook={handleSignUpWithFacebook} />
-                </div>
+            </div>
+            <div className="ErrorMsg">
+                {serverError}
             </div>
             <div className="registerButtons">
                 <button onClick={submit} className="btn"> Register </button>
