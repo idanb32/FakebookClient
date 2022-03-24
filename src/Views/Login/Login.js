@@ -50,7 +50,6 @@ const Login = (props) => {
         axios.post(port + "authentication/loginWithGoogle", googleObj).
             then((resault) => {
                 let data = resault.data;
-                console.log(typeof data);
                 if (typeof data == "string")
                     setServerError(data);
                 else props.logIn(data);

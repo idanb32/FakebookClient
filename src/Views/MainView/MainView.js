@@ -3,7 +3,11 @@ import Login from "../Login/Login";
 import MainPage from "../MainPage/MainPage";
 import useLocalStorage from "../../Hooks/Localstorage";
 import { useLocation } from "react-router-dom";
-import axios from 'axios'
+import axios from 'axios';
+
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import Store from "../../Redux/Store";
 
 const port = "http://localhost:3000/"
 
@@ -15,20 +19,22 @@ const MainView = () => {
         if (location.state)
             setToken(location.state.token)
         if (token) {
+            console.log('in use effect')
             axios.post(port + "authentication/refreshTheToken", { refreshToken: token.refreshToken })
                 .then((resault) => {
-                    let newToken = {
-                        accessToken: resault.data,
-                        refreshToken: token.refreshToken
-                    };
-                    setToken(newToken);
+                    let newToken2 = resault.data.token;
+                    setToken(newToken2);
                 })
                 .catch((error) => console.log(error));
         }
     }, [location.state])
 
     return (<div className="MainView">
-        {token ? <MainPage token={token} /> : <Login logIn={setToken} />}
+        {token ?
+            <Provider store={Store}>
+                <MainPage token={token} />
+            </Provider> :
+            <Login logIn={setToken} />}
     </div>)
 }
 
