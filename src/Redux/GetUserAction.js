@@ -29,3 +29,11 @@ export const getUser = () => async (dispatch) => {
     }
     catch (err2) { dispatch(actionTypes.userLoadError(err2)) }
 }
+
+export const addFriend=(friend)=>{
+    
+    return{
+        type: "ADD_FRIEND",
+        payload: friend
+    }
+}
