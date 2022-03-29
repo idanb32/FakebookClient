@@ -13,7 +13,7 @@ ul {
 a{
   text-decoration: none;
 }
-.btn{
+button{
   border-radius: 0.8rem;
   min-height: 30px;
   cursor: pointer;

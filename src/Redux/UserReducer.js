@@ -10,7 +10,6 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case "USERS_LOAD_START": {
-            console.log("dispatched start")
             return {
                 ...state,
                 isLoading: true,
@@ -20,9 +19,6 @@ const userReducer = (state = initialState, action) => {
         }
 
         case "USERS_LOAD_SUCCESS": {
-            console.log("dispatched succsess")
-            console.log(action.payload);
-            console.log(state);
             return {
                 ...state,
                 isLoading: false,
@@ -35,6 +31,18 @@ const userReducer = (state = initialState, action) => {
                 isLoading: false,
                 errorMessage: action.payload,
             };
+        case "ADD_FRIEND": {
+            let friends = state.user.friends;
+            friends.push(action.payload);
+            let updatedUser = state.user;
+            updatedUser.friends = friends;
+            console.log(updatedUser);
+            console.log(action.payload);
+            return {
+                ...state,
+                user: updatedUser
+            }
+        }
         default: return state;
     }
 }

@@ -1,0 +1,11 @@
+.img{ 
+    width: 150px;
+    height: 150px;
+    border: 1px solid black;
+}
+.Post{
+    border: 1px solid black;
+    display: flex;
+    padding: var(--gap-s);
+    gap: var(--gap-s);
+}

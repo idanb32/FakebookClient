@@ -1,0 +1,34 @@
+.potianalFriend{
+    display: flex;
+    border: 0.5mm solid grey;
+    flex-wrap: wrap;
+    align-items: stretch ;
+    justify-content: center;
+    width: 100%;
+}
+.partLine{
+    border: 0.5mm solid grey;
+    display: flex;
+    justify-content: center;
+    flex: 1;
+}
+.AddAFriend{
+    display: flex;
+    flex-direction: column;
+}
+.searcher{
+    display: flex;
+    flex-direction:row;
+    padding: var(--gap-s);
+    gap: var(--gap-s);
+}
+.addAFriendSearchBarBtns{
+    display:  flex;
+    gap: var(--gap-m);
+
+}
+
+.addAFriendContainer{
+    align-self: center;
+    padding: var(--gap-s);
+}
