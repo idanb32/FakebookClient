@@ -1,0 +1,53 @@
+.filterWrapper{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-s);
+    padding: var(--gap-s);
+}
+.fromDateToDate{
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-s);
+    padding: var(--gap-s);
+    flex-wrap: wrap;
+}
+.innerInput{
+    height: fit-content;
+}
+.userNameTags{
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap-s);
+    padding: var(--gap-s);
+    flex-wrap: wrap;
+}
+.filterByTags{
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap-s);
+    padding: var(--gap-s);
+    flex-wrap: wrap;
+}
+.filterByFriendGroups{
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap-s);
+    padding: var(--gap-s);
+    flex-wrap: wrap;
+}
+.innerFriendsGroupName{
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-s);
+    padding: var(--gap-s);
+    flex-wrap: wrap;
+}
+.radioFriendsGroups{
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap-s);
+}
+.dateRange{
+    width: 100%;
+}

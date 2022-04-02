@@ -3,4 +3,16 @@
     height: 100%;
     width: 100%;
     grid-template-columns: 1fr 4fr;
+    border: 1px solid black;
+}
+.leftSide{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
+.mainPageButtons{
+    display: flex;
+    flex-direction: row;
+    padding: var(--gap-s);
+    gap: var(--gap-s);
 }

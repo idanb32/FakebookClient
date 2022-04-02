@@ -31,6 +31,7 @@ const AddPost = (props) => {
         if (!user) return
         let serverRespond = await axios.post(port + "friends/GetFriends", { id: user._id });
         setFriends(serverRespond.data);
+        console.log(user);
     }, [user])
 
 
@@ -82,7 +83,7 @@ const AddPost = (props) => {
     const renderFriendsTagged = () => {
         return friends.map((friend) => {
             return (<div key={friend.id} className="radioFriends">
-                {friend.name}
+                {friend.name} : 
                 <Input type="radio"
                     value={friend.id}
                     onClick={handleFriendClicked}
@@ -102,6 +103,7 @@ const AddPost = (props) => {
             let imageUrl = res.data;
             navigator.geolocation.getCurrentPosition((position) => {
                 let location = [position.coords.latitude, position.coords.longitude];
+                console.log(location);
                 if (randomLocation) {
                     if (Math.floor(Math.random() * 2) == 0)
                         location[0] = location[0] + Math.floor(Math.random() * 9) / 10;
@@ -119,7 +121,6 @@ const AddPost = (props) => {
                     user_tags: userTaged,
                     img: imageUrl,
                     location: location
-
                 }
                 let friendsId = friends.map((friend) => friend.id)
                 let fullPost = {

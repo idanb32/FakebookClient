@@ -21,6 +21,7 @@
     display: flex;
     width: 100%;
     flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .postHeading{
@@ -48,6 +49,7 @@
 }
 .friendsTagged{
     background-color:var(--background-white) ;
+    flex-wrap: wrap;
 }
 .radioInput{
     width: 20px;
@@ -61,9 +63,14 @@
 
 .radioFriends{
     display: flex;
+    gap: var(--gap-s);
 }
 
 .randomLocation{
     background-color:var(--background-white) ;
+    display: flex;
+}
+.addPostButtons{
+    gap: var(--gap-s);
     display: flex;
 }

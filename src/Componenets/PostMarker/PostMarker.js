@@ -21,7 +21,7 @@ const PostMarker = (props) => {
             let flag = props.post.likes.includes(user._id);
             setLike(flag);
         }
-        console.log("postMarker");
+        console.log(user);
     }, [props.post, user])
 
     const openUp = () => {

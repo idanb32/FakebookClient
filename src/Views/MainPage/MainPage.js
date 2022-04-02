@@ -4,11 +4,13 @@ import { getUser } from "../../Redux/GetUserAction";
 import { getPosts } from "../../Redux/GetPostsAction";
 import MapComponenet from "../../Componenets/MapComponenet/MapComponenet";
 import './MainPage.css'
-import { SocketProvider } from "../../Context/SocketProvider";
-import { Link } from "react-router-dom";
+import { SocketProvider, useSocket } from "../../Context/SocketProvider";
 import AddPost from "../../Componenets/AddPost/AddPost";
 import PostsFeed from "../../Componenets/PostsFeed/PostsFeed";
 import AddAFriend from "../../Componenets/AddAFriend/AddAFriend";
+import AddFriendGroup from "../../Componenets/AddFriendGroup/AddFriendGroup";
+import Filter from "../../Componenets/Filter/Filter";
+import Logout from "../../Componenets/Logout/Logout";
 
 
 const MainPage = (props) => {
@@ -17,27 +19,29 @@ const MainPage = (props) => {
     const [map, setMap] = useState();
     const [renderAddPost, setRenderAddPost] = useState(false);
     const [renderAddFriend, setRenderAddFriend] = useState(false);
+    const [renderAddFriendGroup, setRenderAddFriendGroup] = useState(false);
     const [renderMap, setRenderMap] = useState(true);
     const { isLoading, user, errorMessage } = useSelector(state => state.userInfo.userReducer);
-    const { postIsLoading, posts, postErrorMessage } = useSelector(state => state.Posts.userReducer);
-    useEffect(() => {
+    const { postIsLoading, posts, shownPosts, postErrorMessage } = useSelector(state => state.Posts.userReducer);
+    const socket = useSocket();
+
+    useEffect(async () => {
         dispatcher(getUser());
     }, [])
 
-    useEffect(() => {
-        console.log(user);
-        console.log(isLoading);
+
+    useEffect(async () => {
         if (user) {
             setUserInfo(user);
             dispatcher(getPosts(user._id));
         }
         console.log("userChanged");
-    }, [user, isLoading])
+    }, [user])
 
     useEffect(() => {
-        if (posts)
-            console.log(posts);
-    }, [posts])
+        if (shownPosts)
+            console.log(shownPosts);
+    }, [shownPosts])
 
     const handleGoToAddAPostClick = () => {
         setRenderAddPost(!renderAddPost);
@@ -50,28 +54,43 @@ const MainPage = (props) => {
         setRenderAddFriend(!renderAddFriend)
     }
 
+    const handleGoToAddFriendGroup = () => {
+        setRenderAddFriendGroup(!renderAddFriendGroup)
+    }
+
+    
+
+
     return (<div>
         {userInfo ?
             <SocketProvider id={userInfo._id}>
-                {renderAddFriend ? 
-                <AddAFriend  MoveToMainPage={handleGoToAddFriendClick}/>
+                {renderAddFriend ?
+                    <AddAFriend MoveToMainPage={handleGoToAddFriendClick} token={props.token} setToken={props.setToken} />
                     :
-                    renderAddPost ?
-                        <AddPost MoveToMainPage={handleGoToAddAPostClick} />
+                    renderAddFriendGroup ?
+                        <AddFriendGroup MoveToMainPage={handleGoToAddFriendGroup} token={props.token} setToken={props.setToken} />
                         :
-                        <div className="MainPage">
-                            <div>
-                                <button onClick={handleGoToAddAPostClick}>Add post</button>
-                                <button onClick={handleGoToAddFriendClick}>Add a friend</button>
-                                {isLoading && <h3>Loading...</h3>}
-                                {errorMessage && <h3>{errorMessage}</h3>}
-                                {user && <h3>{user.user_display}</h3>}
+                        renderAddPost ?
+                            <AddPost MoveToMainPage={handleGoToAddAPostClick} />
+                            :
+                            <div className="MainPage">
+                                <div className="leftSide">
+                                    <div className="mainPageButtons">
+                                        <button onClick={handleGoToAddAPostClick}>Add post</button>
+                                        <button onClick={handleGoToAddFriendClick}>Add a friend</button>
+                                        <button onClick={handleGoToAddFriendGroup}>Add friend group</button>
+                                        <Logout token={props.token}  />
+                                    </div>
+                                    {isLoading && <h3>Loading...</h3>}
+                                    {errorMessage && <h3>{errorMessage}</h3>}
+                                    {user && <h3>{user.user_display}</h3>}
+                                    <Filter />
+                                </div>
+                                {renderMap ?
+                                    <MapComponenet setMap={setMap} change={ChangeBetweenMapAndFeed} token={props.token} setToken={props.setToken} />
+                                    : <PostsFeed change={ChangeBetweenMapAndFeed} />
+                                }
                             </div>
-                            {renderMap ?
-                                <MapComponenet setMap={setMap} change={ChangeBetweenMapAndFeed} />
-                                : <PostsFeed change={ChangeBetweenMapAndFeed} />
-                            }
-                        </div>
                 }
             </SocketProvider> : <></>
         } </div>)

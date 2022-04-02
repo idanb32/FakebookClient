@@ -15,6 +15,10 @@ const MainView = () => {
     const [token, setToken] = useLocalStorage();
     const location = useLocation();
 
+    const changeToken =(token) =>{
+        setToken(token);
+    }
+
     useEffect(() => {
         if (location.state)
             setToken(location.state.token)
@@ -32,7 +36,7 @@ const MainView = () => {
     return (<div className="MainView">
         {token ?
             <Provider store={Store}>
-                <MainPage token={token} />
+                <MainPage token={token} setToken={changeToken} />
             </Provider> :
             <Login logIn={setToken} />}
     </div>)

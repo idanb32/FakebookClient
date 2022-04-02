@@ -43,6 +43,16 @@ const userReducer = (state = initialState, action) => {
                 user: updatedUser
             }
         }
+        case "ADD_FRIEND_GROUP": {
+            let friend_groups = state.user.friend_groups;
+            friend_groups.push(action.payload);
+            let updatedUser = state.user;
+            updatedUser.friend_groups = friend_groups;
+            return {
+                ...state,
+                user: updatedUser
+            }
+        }
         default: return state;
     }
 }

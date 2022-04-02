@@ -23,22 +23,31 @@ const AddAFriend = (props) => {
 
     }, [user])
 
-    useEffect(() => {
-        if (socket) {
-            console.log(socket);
-            socket.on('addFriend', (friend) => {
-                console.log('add a friend');
-                dispatcher(addFriend(friend));
-                updateFriends();
-            })
 
+    useEffect(() => {
+        if (!socket) return
+        console.log(socket);
+        if (socket.hasListeners('addFriend')) {
+            console.log('socket have listener');
+            return;
         }
+        socket.on('addFriend', async (friend) => {
+            console.log('add a friend');
+            dispatcher(addFriend(friend));
+            updateFriends([...addAbleUsers], friend);
+            let newToken = await axios.post(port + "authentication/refreshTheToken", { refreshToken: props.token.refreshToken });
+            console.log(newToken.data);
+            props.setToken(newToken.data.token);
+        })
+
+
     }, [socket])
 
     const handleSearchBarChange = (value) => {
         setSearchBar(value.target.value);
     }
 
+    //need to finish
     const GetByName = () => {
         console.log(searchBar);
         console.log(user);
@@ -48,7 +57,8 @@ const AddAFriend = (props) => {
         console.log(user.friends);
         let nonFriendsUsers = await axios.post(port + 'friends/GetAllNonFriendsUsers',
             { friends: user.friends });
-        setAddAbleUsers(nonFriendsUsers.data);
+        let newArr = nonFriendsUsers.data.filter(item => item.id !== user._id);
+        setAddAbleUsers(newArr);
     }
 
     const handleAddFriend = async (e) => {
@@ -61,8 +71,8 @@ const AddAFriend = (props) => {
         socket.emit("AddANewFriend", (data));
     }
 
-    const updateFriends = (friendId) => {
-        let newArr = addAbleUsers.filter(item => item.id !== friendId);
+    const updateFriends = (addAbleUsers, friendId) => {
+        let newArr = addAbleUsers.filter(item => (item.id !== friendId && item.id !== user._id));
         setAddAbleUsers(newArr);
     }
 

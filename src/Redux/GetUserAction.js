@@ -8,7 +8,6 @@ export const getUser = () => async (dispatch) => {
 
     let token = localStorage.getItem(key);
     let sendMe = JSON.parse(token);
-    console.log(sendMe);
     try {
         let res = await axios.post(port + "authentication/getInfo", { "token": sendMe.accessToken });
         let total = res.data;
@@ -35,5 +34,12 @@ export const addFriend=(friend)=>{
     return{
         type: "ADD_FRIEND",
         payload: friend
+    }
+}
+
+export const addFriendGroup = (friendGroupId) =>{
+    return{
+        type:"ADD_FRIEND_GROUP" , 
+        payload: friendGroupId
     }
 }

@@ -21,3 +21,21 @@ export const addPost =(post) =>{
         payload: post
     }
 }
+export const changePost =(post) =>{
+    return{
+        type: "CHANGE_POST",
+        payload: post
+    }
+}
+
+export const showPost =(posts) =>{
+    return{
+        type: "SHOW_POST",
+        payload: posts
+    }
+}
+export const showAll =() =>{
+    return{
+        type: "SHOW_ALL"
+    }
+}

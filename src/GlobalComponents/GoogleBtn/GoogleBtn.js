@@ -30,7 +30,7 @@ const GoogleBtn = (props) => {
             onSuccess={onLoginSuccess}
             onFailure={onLoginFailure}
             cookiePolicy={'single_host_origin'}
-            isSignedIn={true}
+            isSignedIn={false}
         />
     </div>)
 }

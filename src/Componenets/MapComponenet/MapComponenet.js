@@ -5,26 +5,36 @@ import { useSocket } from "../../Context/SocketProvider";
 import "./MapComponenet.css";
 import { addPost } from "../../Redux/GetPostsAction";
 import PostMarker from "../PostMarker/PostMarker";
-// const 0.04
+import axios from 'axios';
+const port = "http://localhost:3000/";
 
 const MapComponenet = (props) => {
     const [myPosition, setMyPosition] = useState();
     const [map, setMap] = useState();
     const socket = useSocket();
     const dispatch = useDispatch();
-    const { postIsLoading, posts, postErrorMessage } = useSelector(state => state.Posts.userReducer);
+    const { postIsLoading, posts,shownPosts,  postErrorMessage } = useSelector(state => state.Posts.userReducer);
 
     const handleMap = (map) => {
         setMap(map);
         props.setMap(map);
     }
     useEffect(() => {
+
         goToMyPosition();
-        if (socket)
-            socket.on('FriendPosted', (post) => {
-                console.log(post);
-                dispatch(addPost(post));
-            })
+        if (!socket) return
+        if (socket.hasListeners('addFriend')) {
+            console.log('socket have listener');
+            return;
+        }
+
+        socket.on('FriendPosted', async (post) => {
+            console.log(post);
+            dispatch(addPost(post));
+            console.log(props.token);
+            let newToken = await axios.post(port + "authentication/refreshTheToken", { refreshToken: props.token.refreshToken });
+            props.setToken(newToken.data.token);
+        })
     }, [socket])
 
     const goToMyPosition = () => {
@@ -45,9 +55,9 @@ const MapComponenet = (props) => {
     }
 
     const renderMarkers = () => {
-        if (!posts) return <></>
+        if (!shownPosts) return <></>
         let index = -1;
-        return posts.map((post) => {
+        return shownPosts.map((post) => {
             index++;
             let location = [post.location[0] + (index / 100), post.location[1] + (index / 100)]
             return (<Marker position={location} key={index} >
@@ -64,6 +74,7 @@ const MapComponenet = (props) => {
             <button onClick={goToMyPosition}>Go to my position</button>
             <button onClick={goToMarker}>Go to mark</button>
             <button onClick={handleChange} >Show feed insted </button>
+            
         </div>
         {myPosition ?
             <MapContainer center={myPosition} zoom={13} scrollWheelZoom={true}
@@ -72,14 +83,7 @@ const MapComponenet = (props) => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                {posts ?
-                    <Marker position={posts[4].location} key={-1} >
-                        <Popup>
-                            <PostMarker post={posts[4]} />
-                        </Popup>
-                    </Marker>
-                    : <></>
-                }
+
                 {renderMarkers()}
 
             </MapContainer> : <></>}
