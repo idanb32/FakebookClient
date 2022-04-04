@@ -83,7 +83,7 @@ const MainPage = (props) => {
                                     </div>
                                     {isLoading && <h3>Loading...</h3>}
                                     {errorMessage && <h3>{errorMessage}</h3>}
-                                    {user && <h3>{user.user_display}</h3>}
+                                    {userInfo && <h3>{userInfo.user_display}</h3>}
                                     <Filter />
                                 </div>
                                 {renderMap ?

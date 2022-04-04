@@ -4,6 +4,7 @@ import FacebookBtn from "../../GlobalComponents/FacebookBtn/FacebookBtn";
 import GoogleBtn from "../../GlobalComponents/GoogleBtn/GoogleBtn";
 import Input from "../../GlobalComponents/Input/Input";
 import axios from "axios";
+import ForgetPassword from "../../Componenets/ForgetPassword/ForgotPassword";
 import './Login.css'
 
 
@@ -15,6 +16,7 @@ const Login = (props) => {
     const [password, setPassword] = useState("");
     const [passwordValidator, setPasswordValidator] = useState("");
     const [serverError, setServerError] = useState('');
+    const [inLogin, setInLogin] = useState(true);
 
     const handleUserName = (value) => {
         setUserName(value.target.value);
@@ -24,8 +26,12 @@ const Login = (props) => {
         setPassword(value.target.value);
     }
 
+    const handleMoveToForgot = () => {
+        setInLogin(!inLogin);
+    }
 
-    const submit = () => {
+
+    const submit =  () => {
         if (validate()) return
         console.log('passed validate')
         let loginObj = {
@@ -88,37 +94,47 @@ const Login = (props) => {
         return flag;
     }
 
+    const loginWithNewPass = (token)=>{
+        props.logIn(token);
+    }
+
     return (<div className="Login">
-        <div className="LoginWrapper">
-            <div className="loginHeading">
-                <h1 className="heading-1">Login</h1>
-            </div>
-            <div className="InputWrapper">
-                <div className="inputWithValidator username">
-                    <Input onChange={handleUserName} placeholder="Username" className="Input" />
-                    <div className="ErrorMsg"> {userNameValidator}</div>
+        {inLogin ?
+            <div className="LoginWrapper">
+                <div className="loginHeading">
+                    <h1 className="heading-1">Login</h1>
                 </div>
-                <div className="inputWithValidator password">
-                    <Input onChange={handlePassword} placeholder="Password" type="Password" />
-                    <div className="ErrorMsg"> {passwordValidator}</div>
+                <div className="InputWrapper">
+                    <div className="inputWithValidator username">
+                        <Input onChange={handleUserName} placeholder="Username" className="Input" />
+                        <div className="ErrorMsg"> {userNameValidator}</div>
+                    </div>
+                    <div className="inputWithValidator password">
+                        <Input onChange={handlePassword} placeholder="Password" type="Password" />
+                        <div className="ErrorMsg"> {passwordValidator}</div>
+                    </div>
+                    <div>
+                        <GoogleBtn SignUpWithGoogle={handleSignUpWithGoogle} text="Sign in with google" />
+                    </div>
+                    <div>
+                        <FacebookBtn SignUpWithFacebook={handleSignUpWithFacebook} />
+                    </div>
                 </div>
-                <div>
-                    <GoogleBtn SignUpWithGoogle={handleSignUpWithGoogle} text="Sign in with google" />
+                <div className="ErrorMsg">
+                    {serverError}
                 </div>
-                <div>
-                    <FacebookBtn SignUpWithFacebook={handleSignUpWithFacebook} />
+                <div className="loginButtons">
+                    <button onClick={submit} className="btn"> Login </button>
+                    <button onClick={handleMoveToForgot}> Forget your password?</button>
+                    <Link to='/SignUp'>
+                        <button className="btn">Register</button>
+                    </Link>
                 </div>
             </div>
-            <div className="ErrorMsg">
-                {serverError}
-            </div>
-            <div className="loginButtons">
-                <button onClick={submit} className="btn"> Login </button>
-                <Link to='/SignUp'>
-                    <button className="btn">Register</button>
-                </Link>
-            </div>
-        </div>
+            :
+            <ForgetPassword moveToLogin={handleMoveToForgot} login ={loginWithNewPass} />
+        }
+
     </div>
     )
 }
